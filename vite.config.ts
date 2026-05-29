@@ -16,16 +16,19 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
-  base: '/LandingPage-Controle-C/', 
+  base: '/',
+
   plugins: [
     figmaAssetResolver(),
-    react(), // 💡 Limpo! Voltamos ao padrão estável automático
+    react(),
     tailwindcss(),
   ],
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
+
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
