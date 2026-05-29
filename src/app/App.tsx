@@ -123,21 +123,21 @@ function App() {
   ];
 
   return (
-    // FIX: força dark mode + bg explícito no elemento raiz para eliminar o branco
     <div
-      className="dark min-h-screen text-foreground overflow-x-hidden"
+      className="dark min-h-screen w-full text-foreground overflow-x-hidden"
       style={{ backgroundColor: '#0B0F19', color: '#f8fafc' }}
     >
       {/* Navbar */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
+        // CORREÇÃO: Fundo escuro garantido caso scroll ou o menu esteja aberto, evitando sobreposição de textos.
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
+          scrolled || isMenuOpen
             ? 'backdrop-blur-xl border-b border-white/5 shadow-lg'
             : 'bg-transparent'
         }`}
-        style={scrolled ? { backgroundColor: 'rgba(11,15,25,0.85)' } : {}}
+        style={(scrolled || isMenuOpen) ? { backgroundColor: 'rgba(11,15,25,0.95)' } : {}}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
@@ -169,7 +169,7 @@ function App() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 -mr-1 rounded-lg hover:bg-white/10 transition-colors"
+              className="lg:hidden p-2 -mr-1 rounded-lg hover:bg-white/10 transition-colors z-50"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -203,7 +203,6 @@ function App() {
       </motion.nav>
 
       {/* Hero Section */}
-      {/* FIX: bg inline garante que radial-gradient não expõe branco */}
       <section
         className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden"
         style={{ backgroundColor: '#0B0F19' }}
@@ -466,7 +465,7 @@ function App() {
               </div>
             </div>
 
-            {/* Desktop layout — ícone central com position relative no wrapper */}
+            {/* Desktop layout */}
             <div className="hidden md:block relative">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
@@ -516,7 +515,6 @@ function App() {
                 </div>
               </div>
 
-              {/* FIX: ícone central com position absolute corretamente dentro do wrapper relative */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-purple-500/50">
                   <Link2 className="w-8 h-8 text-white" />
@@ -569,7 +567,7 @@ function App() {
         </div>
       </section>
 
-      {/* How It Works — seção Hábitos */}
+      {/* How It Works */}
       <section id="habits" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -586,7 +584,6 @@ function App() {
             </p>
           </motion.div>
 
-          {/* FIX: cada step em box própria, sem layout quebrado em mobile */}
           <div className="max-w-3xl mx-auto space-y-4 sm:space-y-6">
             {howItWorks.map((step, index) => (
               <motion.div
