@@ -19,7 +19,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,10 +30,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # 💡 Linha 'cache' removida para não travar o build sem o lockfile!
 
       - name: Instalar dependências
         run: npm install --legacy-peer-deps
+
+      - name: Instalar binário Linux do Rollup
+        run: npm install @rollup/rollup-linux-x64-gnu --no-save
 
       - name: Build do projeto
         run: npm run build
