@@ -27,6 +27,22 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // CORREÇÃO: Força o fundo do navegador e a barra de status do mobile para a cor do site
+  useEffect(() => {
+    // Muda a cor do fundo do HTML/Body para evitar o branco no "arraste" do mobile
+    document.documentElement.style.backgroundColor = '#0B0F19';
+    document.body.style.backgroundColor = '#0B0F19';
+    
+    // Altera a cor da barra superior do celular (status bar)
+    let metaThemeColor = document.querySelector("meta[name=theme-color]");
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.setAttribute("name", "theme-color");
+      document.head.appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute("content", "#0B0F19");
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -131,7 +147,6 @@ function App() {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        // CORREÇÃO: Fundo escuro garantido caso scroll ou o menu esteja aberto, evitando sobreposição de textos.
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled || isMenuOpen
             ? 'backdrop-blur-xl border-b border-white/5 shadow-lg'
