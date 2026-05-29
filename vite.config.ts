@@ -19,10 +19,7 @@ export default defineConfig({
   base: '/LandingPage-Controle-C/', 
   plugins: [
     figmaAssetResolver(),
-    react({
-      // 💡 ISSO AQUI VAI FORÇAR O COMPILADOR A ENCONTRAR O REACT CORRETAMENTE:
-      jsxRuntime: 'classic' 
-    }),
+    react(), // 💡 Limpo! Voltamos ao padrão estável automático
     tailwindcss(),
   ],
   resolve: {
