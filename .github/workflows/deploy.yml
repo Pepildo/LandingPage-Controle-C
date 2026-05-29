@@ -31,7 +31,7 @@ jobs:
           cache: 'npm'
 
       - name: Instalar dependências
-        run: npm ci --legacy-peer-deps # 👈 Usando a flag para ignorar os conflitos do Tailwind/Emotion
+        run: npm install --force
 
       - name: Build do projeto
         run: npm run build
