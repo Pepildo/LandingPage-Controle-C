@@ -3,7 +3,7 @@ name: Deploy para o GitHub Pages
 on:
   push:
     branches:
-      - master # 👈 Altere para "master" se a sua branch principal tiver esse nome
+      - master
 
 permissions:
   contents: read
@@ -28,10 +28,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          # 💡 Linha 'cache' removida para não travar o build sem o lockfile!
 
       - name: Instalar dependências
-        run: npm install --force
+        run: npm install --legacy-peer-deps
 
       - name: Build do projeto
         run: npm run build
