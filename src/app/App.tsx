@@ -35,7 +35,6 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) setIsMenuOpen(false);
@@ -124,16 +123,21 @@ function App() {
   ];
 
   return (
-    <div className="dark min-h-screen bg-background text-foreground overflow-x-hidden">
+    // FIX: força dark mode + bg explícito no elemento raiz para eliminar o branco
+    <div
+      className="dark min-h-screen text-foreground overflow-x-hidden"
+      style={{ backgroundColor: '#0B0F19', color: '#f8fafc' }}
+    >
       {/* Navbar */}
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#0B0F19]/80 backdrop-blur-xl border-b border-white/5 shadow-lg'
+            ? 'backdrop-blur-xl border-b border-white/5 shadow-lg'
             : 'bg-transparent'
         }`}
+        style={scrolled ? { backgroundColor: 'rgba(11,15,25,0.85)' } : {}}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
@@ -199,10 +203,15 @@ function App() {
       </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-background to-background" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyOHYySDI0di0yaDF6TTM2IDIydjJIMjR2LTJoMXoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30" />
+      {/* FIX: bg inline garante que radial-gradient não expõe branco */}
+      <section
+        className="relative pt-28 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden"
+        style={{ backgroundColor: '#0B0F19' }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+          backgroundImage: `url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyOHYySDI0di0yaDF6TTM2IDIydjJIMjR2LTJoMXoiLz48L2c+PC9nPjwvc3ZnPg==")`
+        }} />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
@@ -216,7 +225,6 @@ function App() {
               <span>Plataforma all-in-one de produtividade</span>
             </motion.div>
 
-            {/* FIX 1: base text-4xl → era text-5xl, quebrava em 320px */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -239,7 +247,6 @@ function App() {
               Gerencie finanças, tarefas, hábitos e compromissos em uma experiência unificada, inteligente e intuitiva.
             </motion.p>
 
-            {/* FIX 2: botões com w-full em mobile para evitar scroll horizontal */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -271,13 +278,11 @@ function App() {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="relative max-w-6xl mx-auto"
           >
-            {/* Glow Effect */}
-            <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-purple-600 via-cyan-600 to-blue-600 rounded-3xl opacity-20 blur-3xl" />
+            <div className="absolute -inset-2 sm:-inset-4 bg-gradient-to-r from-purple-600 via-cyan-600 to-blue-600 rounded-3xl opacity-20 blur-3xl pointer-events-none" />
 
-            {/* Dashboard Container */}
-            <div className="relative rounded-2xl border border-white/10 bg-[#111827]/50 backdrop-blur-xl overflow-hidden shadow-2xl">
+            <div className="relative rounded-2xl border border-white/10 overflow-hidden shadow-2xl" style={{ backgroundColor: 'rgba(17,24,39,0.5)', backdropFilter: 'blur(24px)' }}>
               {/* Dashboard Header */}
-              <div className="border-b border-white/10 p-3 sm:p-4 bg-[#0B0F19]/80">
+              <div className="border-b border-white/10 p-3 sm:p-4" style={{ backgroundColor: 'rgba(11,15,25,0.8)' }}>
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80" />
                   <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80" />
@@ -285,10 +290,8 @@ function App() {
                 </div>
               </div>
 
-              {/* FIX 3: padding menor em mobile, grid col-1 no mobile */}
               <div className="p-4 sm:p-6 md:p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
-                  {/* Financial Card */}
                   <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-4 sm:p-5 md:p-6 border border-green-500/20">
                     <div className="flex items-center justify-between mb-3 sm:mb-4">
                       <span className="text-xs sm:text-sm text-green-400 font-mono">FINANÇAS</span>
@@ -298,7 +301,6 @@ function App() {
                     <div className="text-xs sm:text-sm text-muted-foreground">+18% este mês</div>
                   </div>
 
-                  {/* Tasks Card */}
                   <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-xl p-4 sm:p-5 md:p-6 border border-purple-500/20">
                     <div className="flex items-center justify-between mb-3 sm:mb-4">
                       <span className="text-xs sm:text-sm text-purple-400 font-mono">TAREFAS</span>
@@ -308,7 +310,6 @@ function App() {
                     <div className="text-xs sm:text-sm text-muted-foreground">Concluídas hoje</div>
                   </div>
 
-                  {/* Habits Card */}
                   <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-xl p-4 sm:p-5 md:p-6 border border-cyan-500/20">
                     <div className="flex items-center justify-between mb-3 sm:mb-4">
                       <span className="text-xs sm:text-sm text-cyan-400 font-mono">HÁBITOS</span>
@@ -319,8 +320,7 @@ function App() {
                   </div>
                 </div>
 
-                {/* FIX 4: gráfico com h-32 em mobile, gap menor, barras sem overflow */}
-                <div className="bg-[#151B2E]/50 rounded-xl p-4 sm:p-5 md:p-6 border border-white/5">
+                <div className="rounded-xl p-4 sm:p-5 md:p-6 border border-white/5" style={{ backgroundColor: 'rgba(21,27,46,0.5)' }}>
                   <div className="flex items-center justify-between mb-4 sm:mb-6">
                     <span className="text-xs sm:text-sm font-mono text-muted-foreground">GASTOS MENSAIS</span>
                     <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
@@ -345,7 +345,7 @@ function App() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+      <section id="features" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -361,7 +361,6 @@ function App() {
             </p>
           </motion.div>
 
-          {/* FIX 5: grid-cols-1 no mobile, 2 no sm, 3 no lg */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {modules.map((module, index) => {
               const Icon = module.icon;
@@ -375,7 +374,7 @@ function App() {
                   whileHover={{ y: -4 }}
                   className="group"
                 >
-                  <div className="h-full bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 sm:p-8 hover:border-white/20 hover:bg-white/[0.07] transition-all">
+                  <div className="h-full rounded-2xl border border-white/10 p-6 sm:p-8 hover:border-white/20 transition-all" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
                     <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${module.gradient} flex items-center justify-center mb-4 sm:mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
                       <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                     </div>
@@ -390,7 +389,7 @@ function App() {
       </section>
 
       {/* Synced Section */}
-      <section id="dashboard" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+      <section id="dashboard" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -412,11 +411,10 @@ function App() {
             viewport={{ once: true }}
             className="relative max-w-4xl mx-auto"
           >
-            {/* FIX 6: ícone central removido do absolute em mobile — renderizado inline */}
-            {/* Mobile: empilhado com ícone no meio */}
+            {/* Mobile layout */}
             <div className="flex flex-col md:hidden gap-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+                <div className="rounded-xl border border-white/10 p-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
                   <div className="flex items-center gap-2 mb-3">
                     <Calendar className="w-4 h-4 text-blue-400 flex-shrink-0" />
                     <span className="font-medium text-sm">Agenda</span>
@@ -426,7 +424,7 @@ function App() {
                     <div className="h-1.5 bg-blue-500/30 rounded w-1/2" />
                   </div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+                <div className="rounded-xl border border-white/10 p-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
                   <div className="flex items-center gap-2 mb-3">
                     <CheckSquare className="w-4 h-4 text-purple-400 flex-shrink-0" />
                     <span className="font-medium text-sm">Tarefas</span>
@@ -438,15 +436,14 @@ function App() {
                 </div>
               </div>
 
-              {/* Centro mobile */}
-              <div className="flex justify-center">
+              <div className="flex justify-center py-2">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-purple-500/50">
                   <Link2 className="w-7 h-7 text-white" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+                <div className="rounded-xl border border-white/10 p-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
                   <div className="flex items-center gap-2 mb-3">
                     <DollarSign className="w-4 h-4 text-green-400 flex-shrink-0" />
                     <span className="font-medium text-sm">Finanças</span>
@@ -456,7 +453,7 @@ function App() {
                     <div className="h-1.5 bg-green-500/30 rounded w-3/5" />
                   </div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-4">
+                <div className="rounded-xl border border-white/10 p-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
                   <div className="flex items-center gap-2 mb-3">
                     <Flame className="w-4 h-4 text-cyan-400 flex-shrink-0" />
                     <span className="font-medium text-sm">Hábitos</span>
@@ -469,55 +466,58 @@ function App() {
               </div>
             </div>
 
-            {/* Desktop: layout original com ícone absolutamente posicionado */}
-            <div className="hidden md:grid md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Calendar className="w-5 h-5 text-blue-400" />
-                    <span className="font-medium">Agenda</span>
+            {/* Desktop layout — ícone central com position relative no wrapper */}
+            <div className="hidden md:block relative">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <div className="rounded-xl border border-white/10 p-6" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Calendar className="w-5 h-5 text-blue-400" />
+                      <span className="font-medium">Agenda</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-2 bg-blue-500/30 rounded w-3/4" />
+                      <div className="h-2 bg-blue-500/30 rounded w-1/2" />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <div className="h-2 bg-blue-500/30 rounded w-3/4" />
-                    <div className="h-2 bg-blue-500/30 rounded w-1/2" />
+                  <div className="rounded-xl border border-white/10 p-6" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <CheckSquare className="w-5 h-5 text-purple-400" />
+                      <span className="font-medium">Tarefas</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-2 bg-purple-500/30 rounded w-2/3" />
+                      <div className="h-2 bg-purple-500/30 rounded w-4/5" />
+                    </div>
                   </div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <CheckSquare className="w-5 h-5 text-purple-400" />
-                    <span className="font-medium">Tarefas</span>
+
+                <div className="space-y-6">
+                  <div className="rounded-xl border border-white/10 p-6" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <DollarSign className="w-5 h-5 text-green-400" />
+                      <span className="font-medium">Finanças</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-2 bg-green-500/30 rounded w-1/2" />
+                      <div className="h-2 bg-green-500/30 rounded w-3/5" />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <div className="h-2 bg-purple-500/30 rounded w-2/3" />
-                    <div className="h-2 bg-purple-500/30 rounded w-4/5" />
+                  <div className="rounded-xl border border-white/10 p-6" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Flame className="w-5 h-5 text-cyan-400" />
+                      <span className="font-medium">Hábitos</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="h-2 bg-cyan-500/30 rounded w-3/4" />
+                      <div className="h-2 bg-cyan-500/30 rounded w-1/2" />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <DollarSign className="w-5 h-5 text-green-400" />
-                    <span className="font-medium">Finanças</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-2 bg-green-500/30 rounded w-1/2" />
-                    <div className="h-2 bg-green-500/30 rounded w-3/5" />
-                  </div>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Flame className="w-5 h-5 text-cyan-400" />
-                    <span className="font-medium">Hábitos</span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-2 bg-cyan-500/30 rounded w-3/4" />
-                    <div className="h-2 bg-cyan-500/30 rounded w-1/2" />
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              {/* FIX: ícone central com position absolute corretamente dentro do wrapper relative */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-purple-500/50">
                   <Link2 className="w-8 h-8 text-white" />
                 </div>
@@ -528,7 +528,7 @@ function App() {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+      <section id="benefits" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -554,7 +554,8 @@ function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-5 sm:p-6 hover:border-white/20 hover:bg-white/[0.07] transition-all"
+                  className="rounded-xl border border-white/10 p-5 sm:p-6 hover:border-white/20 transition-all"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
                 >
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-3 sm:mb-4">
                     <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -568,8 +569,8 @@ function App() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="habits" className="py-16 sm:py-24 px-4 sm:px-6 relative">
+      {/* How It Works — seção Hábitos */}
+      <section id="habits" className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -585,8 +586,8 @@ function App() {
             </p>
           </motion.div>
 
-          {/* FIX 7: ícone menor em mobile, gap menor, texto não esmagado */}
-          <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
+          {/* FIX: cada step em box própria, sem layout quebrado em mobile */}
+          <div className="max-w-3xl mx-auto space-y-4 sm:space-y-6">
             {howItWorks.map((step, index) => (
               <motion.div
                 key={index}
@@ -594,14 +595,15 @@ function App() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15 }}
-                className="flex gap-4 sm:gap-6 items-start"
+                className="flex gap-4 sm:gap-6 items-start rounded-xl border border-white/10 p-4 sm:p-6"
+                style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
               >
-                <div className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center font-bold text-base sm:text-xl shadow-lg">
+                <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center font-bold text-sm sm:text-lg shadow-lg">
                   {step.number}
                 </div>
-                <div className="flex-1 pt-1.5 sm:pt-2 min-w-0">
-                  <h3 className="text-xl sm:text-2xl font-semibold mb-1 sm:mb-2">{step.title}</h3>
-                  <p className="text-sm sm:text-base text-muted-foreground">{step.description}</p>
+                <div className="flex-1 min-w-0 pt-1 sm:pt-1.5">
+                  <h3 className="text-lg sm:text-2xl font-semibold mb-1 sm:mb-2">{step.title}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{step.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -610,7 +612,7 @@ function App() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 relative">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 relative" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -621,7 +623,6 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-cyan-600 to-blue-600 opacity-90" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
 
-            {/* FIX 8: padding e texto responsivos no CTA */}
             <div className="relative z-10 p-8 sm:p-12 md:p-16 text-center">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
                 Pare de espalhar sua vida
@@ -645,9 +646,8 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-10 sm:py-12 px-4 sm:px-6">
+      <footer className="border-t border-white/5 py-10 sm:py-12 px-4 sm:px-6" style={{ backgroundColor: '#0B0F19' }}>
         <div className="max-w-7xl mx-auto">
-          {/* FIX 9: footer totalmente centrado em mobile com gap consistente */}
           <div className="flex flex-col items-center gap-6 sm:gap-8 md:flex-row md:justify-between">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
@@ -656,7 +656,6 @@ function App() {
               <span className="text-lg sm:text-xl font-semibold">Controle-C</span>
             </div>
 
-            {/* FIX 10: links em wrap centralizado no mobile */}
             <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground transition-colors">Recursos</a>
               <a href="#" className="hover:text-foreground transition-colors">Preços</a>
